@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 const connection = require("./database/database");
 const PORT = 3005;
 
-//const User = require("./users/User");
+const usersController = require("./users/UsersController");
+const User = require("./users/User");
 
 // View engine
 app.set('view engine','ejs');
@@ -25,7 +26,9 @@ connection
         console.log(error);
     })
 
-//app.use("/",usersController);
+//adicionar a regra de middleware
+app.use("/",usersController);
+
 
 app.get("/", (req, res) => {
     res.render("index");
