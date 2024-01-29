@@ -3,6 +3,13 @@ const router = express.Router();
 const User = require("./User");
 const bcrypt = require('bcryptjs');
 
+
+router.get("/users/index", (req, res) => {
+    User.findAll().then(users => {
+        res.render("users/index",{users: users});
+    });
+});
+
 router.get("/users/create",(req, res) => {
     res.render("users/create");
 });
@@ -23,7 +30,7 @@ router.post("/users/save-create", (req, res) => {
                 email: email,
                 password: hash
             }).then(() => {
-                res.redirect("/");
+                res.redirect("/users/index");
             }).catch((err) => {
                 res.redirect("/");
             });
