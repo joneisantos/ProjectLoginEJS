@@ -10,9 +10,11 @@ router.get("/users/index", (req, res) => {
     });
 });
 
+
 router.get("/users/create",(req, res) => {
     res.render("users/create");
 });
+
 
 router.post("/users/save-create", (req, res) => {
     var nome = req.body.nome;
@@ -39,6 +41,26 @@ router.post("/users/save-create", (req, res) => {
             res.redirect("/users/create");
         }
     });
+});
+
+
+router.post("/users/delete", (req, res) => {
+    var id = req.body.id;
+    if(id != undefined){
+        if(!isNaN(id)){
+            User.destroy({
+                where: {
+                    id: id
+                }
+            }).then(() => {
+                res.redirect("/users/index");
+            });
+        }else{// NÃO FOR UM NÚMERO
+            res.redirect("/users/index");
+        }
+    }else{ // NULL
+        res.redirect("/users/index");
+    }
 });
 
 module.exports = router;

@@ -22,8 +22,13 @@
                     <td><%= user.nome %></td>
                     <td><%= user.email %></td>
                     <td style="text-align: center;">
+                    <form method="POST" action="/users/delete" onsubmit="confirmDelete(event, this)">
                         <a class="btn btn-warning" href="/users/update" data-toggle="tooltip" title="Editar <%= user.nome %>">Editar</a>
-                        <a class="btn btn-danger" href="/users/delete" data-toggle="tooltip" title="Excluir <%= user.nome %>">Excluir</a>
+                       
+                        <input type="hidden" name="id" value="<%= user.id %>">
+                        <button class="btn btn-danger" data-toggle="tooltip" title="Excluir <%= user.nome %>">Excluir</button>
+                    
+                    </form>
                     </td>
                 </tr>
             <% }) %>
@@ -32,3 +37,12 @@
 </div>
 
 <%- include ../partials/footer.ejs %>
+<script>
+    function confirmDelete(event, form){
+        event.preventDefault();
+        var decision = confirm("Deseja realmente confirmar esse registro?");
+        if(decision){
+            form.submit();
+        }
+    }
+</script>
