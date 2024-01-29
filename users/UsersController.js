@@ -16,6 +16,25 @@ router.get("/users/create",(req, res) => {
 });
 
 
+router.get("/users/edit/:id", (req, res) => {
+    var id = req.params.id;
+
+    if(isNaN(id)){
+        res.redirect("/users/index"); 
+    }
+
+    User.findByPk(id).then(user => {
+        if(user != undefined){
+            res.render("users/edit",{user: user});
+        }else{
+            res.redirect("/users/index");
+        }
+    }).catch(erro => {
+        res.redirect("/users/index");        
+    })
+});
+
+
 router.post("/users/save-create", (req, res) => {
     var nome = req.body.nome;
     var email = req.body.email;
@@ -41,6 +60,22 @@ router.post("/users/save-create", (req, res) => {
             res.redirect("/users/create");
         }
     });
+});
+
+
+router.post("/users/save-edit", (req, res) => {
+    var id = req.body.id;
+    var nome = req.body.nome;
+    var email = req.body.email;
+
+    User.update({nome: nome, email: email },{
+        where: {
+            id: id
+        }
+    }).then(() => {
+        res.redirect("/users/index");    
+    })
+
 });
 
 
