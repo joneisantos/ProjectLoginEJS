@@ -8,14 +8,14 @@
             <p class="lead">Insira seus dados para efetuar o login</p>
             <hr class="my-4">
             <div class="card-header">
-                <form>
+                <form method="POST" action="/authenticate">
                     <p>           
                         <label class="mb-0 mt-3">Seu e-mail</label><br>
-                        <input type="text" name="txtEmail" placeholder="E-mail"><br>
+                        <input type="text" name="email" placeholder="E-mail"><br>
                         <label class="mb-0 mt-3">Sua senha</label><br>
-                        <input type="password" name="txtSenha" placeholder="******">
+                        <input type="password" name="password" placeholder="******">
                     </p>
-                    <a class="btn btn-primary btn-lg" href="#">Entrar</a>
+                    <button type="submit" class="btn btn-info btn-block">Entrar</button>
                 </form>
             </div>
         </div>        

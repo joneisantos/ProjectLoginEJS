@@ -2,21 +2,53 @@ const express = require("express");
 const router = express.Router();
 const User = require("./User");
 const bcrypt = require('bcryptjs');
+const authentication = require("../middlewares/authentication");
+
+router.post("/authenticate", (req, res) => {
+    var email = req.body.email;
+    var password = req.body.password;
+
+    User.findOne({where:{email: email}}).then(user => {
+        if(user != undefined){ // Se existe um usuário com esse e-mail
+            // Validar senha
+            var correct = bcrypt.compareSync(password,user.password);
+
+            if(correct){
+                req.session.user = {
+                    id: user.id,
+                    email: user.email
+                }
+                res.redirect("/users/index");
+            }else{
+                res.redirect("/"); 
+            }
+
+        }else{
+            res.redirect("/");
+        }
+    });
+});
 
 
-router.get("/users/index", (req, res) => {
+router.get("/logout", (req, res) => {
+    req.session.user = undefined;
+    res.redirect("/");
+})
+
+
+router.get("/users/index", authentication, (req, res) => {
     User.findAll().then(users => {
         res.render("users/index",{users: users});
     });
 });
 
 
-router.get("/users/create",(req, res) => {
+router.get("/users/create", authentication, (req, res) => {
     res.render("users/create");
 });
 
 
-router.get("/users/edit/:id", (req, res) => {
+router.get("/users/edit/:id", authentication, (req, res) => {
     var id = req.params.id;
 
     if(isNaN(id)){
@@ -32,6 +64,26 @@ router.get("/users/edit/:id", (req, res) => {
     }).catch(erro => {
         res.redirect("/users/index");        
     })
+});
+
+
+router.post("/users/delete", authentication, (req, res) => {
+    var id = req.body.id;
+    if(id != undefined){
+        if(!isNaN(id)){
+            User.destroy({
+                where: {
+                    id: id
+                }
+            }).then(() => {
+                res.redirect("/users/index");
+            });
+        }else{// NÃO FOR UM NÚMERO
+            res.redirect("/users/index");
+        }
+    }else{ // NULL
+        res.redirect("/users/index");
+    }
 });
 
 
@@ -78,24 +130,5 @@ router.post("/users/save-edit", (req, res) => {
 
 });
 
-
-router.post("/users/delete", (req, res) => {
-    var id = req.body.id;
-    if(id != undefined){
-        if(!isNaN(id)){
-            User.destroy({
-                where: {
-                    id: id
-                }
-            }).then(() => {
-                res.redirect("/users/index");
-            });
-        }else{// NÃO FOR UM NÚMERO
-            res.redirect("/users/index");
-        }
-    }else{ // NULL
-        res.redirect("/users/index");
-    }
-});
 
 module.exports = router;
