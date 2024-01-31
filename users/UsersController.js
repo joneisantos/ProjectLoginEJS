@@ -5,8 +5,15 @@ const bcrypt = require('bcryptjs');
 const authentication = require("../middlewares/authentication");
 
 router.post("/authenticate", (req, res) => {
+    var nome = req.body.nome;
     var email = req.body.email;
     var password = req.body.password;
+
+    const date = new Date()
+    var today = date.getDate();
+
+    req.session.nome = nome;
+    req.session.today = today;
 
     User.findOne({where:{email: email}}).then(user => {
         if(user != undefined){ // Se existe um usuário com esse e-mail
@@ -16,7 +23,9 @@ router.post("/authenticate", (req, res) => {
             if(correct){
                 req.session.user = {
                     id: user.id,
-                    email: user.email
+                    nome: user.nome,
+                    email: user.email,
+                    today: today
                 }
                 res.redirect("/users/index");
             }else{

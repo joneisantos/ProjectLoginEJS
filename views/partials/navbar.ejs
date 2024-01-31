@@ -13,10 +13,11 @@
         <button class="btn btn-info btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Perfil
         </button>
-        <div class="dropdown-menu" style="margin-left: -200px; width: 300px;">
-            <div style="margin-left: 20px; width: 300px;">
-            Usuário:<br>
-            Tempo Sessão:<br><br>
+        <div class="dropdown-menu" style="margin-left: -200px; width: 300px; background-color: #ebebeb;">
+            <div style="margin-left: 20px; width: 290px; ">
+            <b>Usuário:</b> <%= user.nome || 'Vistante' %><br>
+            <b>Tempo Sessão:</b> <%= user.today || '00:35:00' %><br><br>
+            <a href="/#">Alterar senha</a><br>
             <a href="/logout">Logout</a>
             </div>
         </div>
