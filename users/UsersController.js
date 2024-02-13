@@ -52,6 +52,22 @@ router.get("/users/index", authentication, (req, res) => {
 });
 
 
+router.get("/users/change-pass/:id", authentication, (req, res) => {
+    var id = req.params.id;
+    
+    User.findByPk(id).then(user => {
+        if(user != undefined){
+            res.render("users/change-pass",{user: user});
+        }else{
+            res.redirect("/users/index");
+        }
+    }).catch(erro => {
+        res.redirect("/users/index");        
+    })
+
+});
+
+
 router.get("/users/create", authentication, (req, res) => {
     res.render("users/create");
 });
@@ -136,6 +152,36 @@ router.post("/users/save-edit", (req, res) => {
     }).then(() => {
         res.redirect("/users/index");    
     })
+
+});
+
+
+router.post("/users/save-password", (req, res) => {
+    var id = req.body.id;
+    var senha = req.body.senha; 
+    var senhaNova = req.body.senhaNova;  
+
+    var salt = bcrypt.genSaltSync(10);
+    var hash = bcrypt.hashSync(senhaNova, salt);  
+
+    let correct = false;
+    if(id == req.session.user.id){
+        correct = true
+    }
+
+    if(correct){
+        User.update({password: hash },{
+            where: {
+                id: id
+            }
+        }).then(() => {
+            console.log("Senha alterada");
+            res.redirect("/users/index");    
+        })
+    }else{
+        console.log("Senha não confere com o usuário logado");
+        res.redirect("/users/change-pass/"+req.session.user.id); 
+    };    
 
 });
 

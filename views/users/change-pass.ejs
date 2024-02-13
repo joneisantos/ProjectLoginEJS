@@ -1,0 +1,21 @@
+<%- include ../partials/header.ejs %>
+<%- include ../partials/navbar.ejs %>
+
+<div class="container">
+    <hr> 
+    <div class="card mt-5">
+        <div class="card-header">
+            <h2>Alterar minha senha</h2>
+        </div>
+        <div class="card-body">
+            <form action="/users/save-password" method="POST">
+                <input class="form-control" name="senha" type="text" placeholder="senha atual" value=""><br>
+                <input class="form-control" name="senhaNova" type="text" placeholder="senha nova" value=""><br>
+                <input type="hidden" name="id" value="<%= user.id %>"><br>
+                <button class="btn btn-success btn-block">Atualizar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include ../partials/footer.ejs %>

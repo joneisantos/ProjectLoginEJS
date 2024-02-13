@@ -15,9 +15,9 @@
         </button>
         <div class="dropdown-menu" style="margin-left: -200px; width: 300px; background-color: #ebebeb;">
             <div style="margin-left: 20px; width: 290px; ">
-            <b>Usuário:</b> <%= user.nome || 'Vistante' %><br>
-            <b>Tempo Sessão:</b> <%= user.today || '00:35:00' %><br><br>
-            <a href="/#">Alterar senha</a><br>
+            <b>Usuário:</b> <%= user.id %> - <%= user.nome || 'Vistante' %><br>
+            <b>Tempo Sessão:</b> <%= user.today || '00:10:00' %><br><br>
+            <a href="/users/change-pass/<%= user.id %>">Alterar senha</a><br>
             <a href="/logout">Logout</a>
             </div>
         </div>
